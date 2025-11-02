@@ -1,0 +1,129 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: myuser
+      RABBITMQ_DEFAULT_PASS: mypass
+    networks:
+      - food-delivery-network
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  order-service:
+    build:
+      context: ./backend/order-service
+      dockerfile: Dockerfile
+    container_name: order-service
+    environment:
+      PORT: 3001
+      RABBITMQ_URL: amqp://myuser:mypass@rabbitmq:5672
+      NODE_ENV: production
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - food-delivery-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  restaurant-service:
+    build:
+      context: ./backend/restaurant-service
+      dockerfile: Dockerfile
+    container_name: restaurant-service
+    environment:
+      PORT: 3002
+      MONGODB_URI: ${MONGODB_URI_RESTAURANT}
+      RABBITMQ_URL: amqp://myuser:mypass@rabbitmq:5672
+      NODE_ENV: production
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - food-delivery-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3002/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  delivery-service:
+    build:
+      context: ./backend/delivery-service
+      dockerfile: Dockerfile
+    container_name: delivery-service
+    environment:
+      PORT: 3003
+      MONGODB_URI: ${MONGODB_URI_DELIVERY}
+      RABBITMQ_URL: amqp://myuser:mypass@rabbitmq:5672
+      NODE_ENV: production
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - food-delivery-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3003/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: 4000
+      ORDER_SERVICE_URL: http://order-service:3001
+      RESTAURANT_SERVICE_URL: http://restaurant-service:3002
+      DELIVERY_SERVICE_URL: http://delivery-service:3003
+      NODE_ENV: production
+    depends_on:
+      order-service:
+        condition: service_healthy
+      restaurant-service:
+        condition: service_healthy
+      delivery-service:
+        condition: service_healthy
+    networks:
+      - food-delivery-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:4000
+      API_URL: http://api-gateway:4000
+      NODE_ENV: production
+    depends_on:
+      - api-gateway
+    networks:
+      - food-delivery-network
+    restart: unless-stopped
+
+networks:
+  food-delivery-network:
+    driver: bridge

@@ -1,0 +1,26 @@
+{
+  "name": "food-order-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Food Order Lifecycle System Backend Services",
+  "scripts": {
+    "install:all": "pnpm run install:gateway && pnpm run install:order && pnpm run install:restaurant && pnpm run install:delivery",
+    "install:gateway": "cd api-gateway && pnpm install",
+    "install:order": "cd order-service && pnpm install",
+    "install:restaurant": "cd restaurant-service && pnpm install",
+    "install:delivery": "cd delivery-service && pnpm install",
+    "start": "concurrently \"pnpm run start:gateway\" \"pnpm run start:order\" \"pnpm run start:restaurant\" \"pnpm run start:delivery\"",
+    "start:gateway": "cd api-gateway && pnpm start",
+    "start:order": "cd order-service && pnpm start",
+    "start:restaurant": "cd restaurant-service && pnpm start",
+    "start:delivery": "cd delivery-service && pnpm start",
+    "dev": "concurrently \"pnpm run dev:gateway\" \"pnpm run dev:order\" \"pnpm run dev:restaurant\" \"pnpm run dev:delivery\"",
+    "dev:gateway": "cd api-gateway && pnpm run dev",
+    "dev:order": "cd order-service && pnpm run dev",
+    "dev:restaurant": "cd restaurant-service && pnpm run dev",
+    "dev:delivery": "cd delivery-service && pnpm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
