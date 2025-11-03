@@ -282,31 +282,19 @@ docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 \
   rabbitmq:3-management
 ```
 
-**Terminal 2 - Order Service:**
+**Terminal 2 - All Backend Services:**
 ```bash
-cd backend/order-service
+cd backend
 pnpm run dev
 ```
 
-**Terminal 3 - Restaurant Service:**
-```bash
-cd backend/restaurant-service
-pnpm run dev
-```
+This will start all backend services concurrently:
+- Order Service (Port 3001)
+- Restaurant Service (Port 3002)
+- Delivery Service (Port 3003)
+- API Gateway (Port 4000)
 
-**Terminal 4 - Delivery Service:**
-```bash
-cd backend/delivery-service
-pnpm run dev
-```
-
-**Terminal 5 - API Gateway:**
-```bash
-cd backend/api-gateway
-pnpm run dev
-```
-
-**Terminal 6 - Frontend:**
+**Terminal 3 - Frontend:**
 ```bash
 cd frontend
 pnpm run dev
