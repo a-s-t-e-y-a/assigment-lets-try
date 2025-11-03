@@ -242,22 +242,13 @@ MONGODB_URI_DELIVERY=your_mongodb_connection_string_for_delivery
 
 **Backend Services:**
 ```bash
-cd backend/order-service
-pnpm install
-
-cd ../restaurant-service
-pnpm install
-
-cd ../delivery-service
-pnpm install
-
-cd ../api-gateway
+cd backend
 pnpm install
 ```
 
 **Frontend:**
 ```bash
-cd ../../frontend
+cd frontend
 pnpm install
 ```
 
