@@ -126,7 +126,7 @@ export default function RestaurantView() {
                 ))}
               </div>
             ) : (allOrdersData?.orders?.length > 0 || allOrdersData?.data?.orders?.length > 0 || allOrdersData?.data?.length > 0) ? (
-              <div className="space-y-3 max-h-[600px] overflow-y-auto">
+              <div className="space-y-3 max-h-[600px] overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
                 {(allOrdersData.orders || allOrdersData.data?.orders || allOrdersData.data || []).map(order => (
                   <div key={order._id || order.orderId || order.id} className="border rounded-lg p-4 space-y-2">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">

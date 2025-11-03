@@ -116,7 +116,18 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
+  html {
+    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
   body {
     @apply bg-background text-foreground;
+    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
   }
 }

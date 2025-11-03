@@ -166,7 +166,7 @@ export default function UserView() {
               <RefreshCw className="h-4 w-4" />
             </Button>
           </CardHeader>
-            <CardContent className="max-h-[600px] overflow-y-auto">
+            <CardContent className="max-h-[600px] overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
               {menuLoading ? (
                 <div className="space-y-4">
                   {[1, 2, 3].map(i => (
@@ -226,7 +226,7 @@ export default function UserView() {
             </CardTitle>
             <CardDescription>Review your items and proceed to checkout</CardDescription>
           </CardHeader>
-          <CardContent className="max-h-[600px] overflow-y-auto">
+          <CardContent className="max-h-[600px] overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
             {cart.length === 0 ? (
               <div className="text-center py-12">
                 <ShoppingCart className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
@@ -235,7 +235,7 @@ export default function UserView() {
               </div>
             ) : (
               <div className="space-y-6">
-                <div className="grid grid-cols-1 gap-3 max-h-[350px] overflow-y-auto pr-2">
+                <div className="grid grid-cols-1 gap-3 max-h-[350px] overflow-y-auto pr-2" style={{ WebkitOverflowScrolling: 'touch' }}>
                   {cart.map(item => (
                     <div key={item.itemId} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg gap-4">
                       <div className="flex-1">
@@ -273,6 +273,7 @@ export default function UserView() {
                       className="w-full p-3 border rounded-lg text-sm"
                       rows={3}
                       placeholder="Enter your delivery address..."
+                      style={{ WebkitOverflowScrolling: 'touch' }}
                     />
                   </div>
                   
@@ -308,7 +309,7 @@ export default function UserView() {
               <RefreshCw className="h-4 w-4" />
             </Button>
           </CardHeader>
-          <CardContent className="max-h-[600px] overflow-y-auto">
+          <CardContent className="max-h-[600px] overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
             {ordersLoading ? (
               <div className="space-y-3">
                 {[1, 2, 3].map(i => (
