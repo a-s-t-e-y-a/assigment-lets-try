@@ -1,5 +1,19 @@
 # Food Order Lifecycle System
 
+## Table of Contents
+- [System Architecture](#system-architecture)
+- [Live Deployment URLs](#live-deployment-urls)
+- [API Testing](#api-testing)
+- [Assumptions](#assumptions)
+- [Tech Stack](#tech-stack)
+- [Project Setup](#project-setup)
+  - [Prerequisites](#prerequisites)
+  - [Local Development Setup](#local-development-setup)
+  - [Running with Docker Compose](#4-running-with-docker-compose-recommended)
+  - [Running Services Individually](#5-running-services-individually-development)
+  - [Production Deployment](#production-deployment)
+  - [Troubleshooting](#troubleshooting)
+
 ## System Architecture
 
 ![System Architecture](./system-architecture.png)
@@ -113,6 +127,18 @@ The backend is implemented using Node.js/Express instead of Spring Boot as speci
 - Simplified microservices communication
 - Better integration with the JavaScript ecosystem
 
+### 11. Environment Variables Exposed
+The `.env` file and environment variables are intentionally made public in the repository for demonstration purposes. This includes:
+- MongoDB connection strings
+- RabbitMQ credentials
+- API keys and secrets
+
+**Important**: All credentials and database instances will be destroyed immediately after the assignment evaluation. In a production environment, sensitive credentials should:
+- Never be committed to version control
+- Use `.gitignore` to exclude `.env` files
+- Be stored in secure secret management systems (AWS Secrets Manager, HashiCorp Vault, etc.)
+- Use environment-specific configurations
+
 ## Tech Stack
 
 ### Backend Services
@@ -182,3 +208,186 @@ The backend is implemented using Node.js/Express instead of Spring Boot as speci
 - `tailwindcss` - Utility-first CSS
 - `lucide-react` - Icon library
 - `shadcn/ui` - UI component library
+
+### Development Tools
+- **Process Manager**: PM2 (for production)
+- **Environment Variables**: dotenv
+- **API Testing**: Postman collection included
+
+## Project Setup
+
+### Prerequisites
+- Node.js (v18 or higher)
+- pnpm (v8 or higher)
+- Docker and Docker Compose
+- MongoDB Atlas account (for cloud database) or local MongoDB
+- Git
+
+### Local Development Setup
+
+#### 1. Clone the Repository
+```bash
+git clone https://github.com/a-s-t-e-y-a/assigment-lets-try.git
+cd assigment-lets-try
+```
+
+#### 2. Environment Configuration
+Create `.env` file in the root directory:
+```env
+MONGODB_URI_RESTAURANT=your_mongodb_connection_string_for_restaurant
+MONGODB_URI_DELIVERY=your_mongodb_connection_string_for_delivery
+```
+
+#### 3. Install Dependencies
+
+**Backend Services:**
+```bash
+cd backend/order-service
+pnpm install
+
+cd ../restaurant-service
+pnpm install
+
+cd ../delivery-service
+pnpm install
+
+cd ../api-gateway
+pnpm install
+```
+
+**Frontend:**
+```bash
+cd ../../frontend
+pnpm install
+```
+
+#### 4. Running with Docker Compose (Recommended)
+
+**Start all services:**
+```bash
+docker-compose up --build
+```
+
+This will start:
+- RabbitMQ (with management UI on port 15672)
+- Order Service (Port 3001)
+- Restaurant Service (Port 3002)
+- Delivery Service (Port 3003)
+- API Gateway (Port 4000)
+- Frontend (Port 7000)
+
+**Stop all services:**
+```bash
+docker-compose down
+```
+
+#### 5. Running Services Individually (Development)
+
+**Terminal 1 - Start RabbitMQ:**
+```bash
+docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 \
+  -e RABBITMQ_DEFAULT_USER=myuser \
+  -e RABBITMQ_DEFAULT_PASS=mypass \
+  rabbitmq:3-management
+```
+
+**Terminal 2 - Order Service:**
+```bash
+cd backend/order-service
+pnpm run dev
+```
+
+**Terminal 3 - Restaurant Service:**
+```bash
+cd backend/restaurant-service
+pnpm run dev
+```
+
+**Terminal 4 - Delivery Service:**
+```bash
+cd backend/delivery-service
+pnpm run dev
+```
+
+**Terminal 5 - API Gateway:**
+```bash
+cd backend/api-gateway
+pnpm run dev
+```
+
+**Terminal 6 - Frontend:**
+```bash
+cd frontend
+pnpm run dev
+```
+
+#### 6. Access the Application
+
+- **Frontend**: http://localhost:7000
+- **API Gateway**: http://localhost:4000/api
+- **Status Monitor**: http://localhost:4000/status
+- **RabbitMQ Management**: http://localhost:15672 (username: myuser, password: mypass)
+
+### Docker Build Only
+
+To build Docker images without running:
+
+```bash
+docker-compose build
+```
+
+### Production Deployment
+
+#### 1. Update Environment Variables
+Update `.env` file with production MongoDB URIs and set:
+```env
+NODE_ENV=production
+```
+
+#### 2. Build and Deploy
+```bash
+docker-compose -f docker-compose.yml up -d --build
+```
+
+#### 3. Check Service Health
+```bash
+curl http://your-server:4000/api/orders/health
+curl http://your-server:4000/api/restaurant/health
+curl http://your-server:4000/api/delivery/health
+```
+
+### Testing with Postman
+
+1. Import the Postman collection from `backend/api-gateway/Food_Order_API.postman_collection.json`
+2. Update the base URL to your deployment URL
+3. Test all endpoints for Order, Restaurant, and Delivery operations
+
+### Troubleshooting
+
+**RabbitMQ Connection Issues:**
+- Ensure RabbitMQ is running: `docker ps | grep rabbitmq`
+- Check connection string in services
+- Wait for RabbitMQ to fully start (may take 30-60 seconds)
+
+**MongoDB Connection Issues:**
+- Verify MongoDB URI is correct in `.env`
+- Check network connectivity to MongoDB Atlas
+- Ensure IP whitelist is configured in MongoDB Atlas
+
+**Port Already in Use:**
+```bash
+# Find process using port
+lsof -i :4000
+# Kill process
+kill -9 <PID>
+```
+
+**Docker Issues:**
+```bash
+# Clean up all containers and volumes
+docker-compose down -v
+docker system prune -a
+
+# Rebuild from scratch
+docker-compose up --build --force-recreate
+```
