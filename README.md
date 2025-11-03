@@ -370,3 +370,136 @@ docker system prune -a
 # Rebuild from scratch
 docker-compose up --build --force-recreate
 ```
+
+## System Design Choices
+
+### 1. Microservices Architecture
+**Decision**: Implemented three separate backend services (Order, Restaurant, Delivery) as per assignment requirements.
+
+**Implementation Benefits**:
+- **Separation of Concerns**: Each service handles a specific domain (orders, restaurant operations, delivery) with its own business logic
+- **Independent Scalability**: Services can be scaled independently based on load (e.g., Order service might need more instances during peak hours)
+- **Fault Isolation**: If one service fails, others can continue operating
+- **Technology Flexibility**: Each service can use different databases or technologies as needed
+- **Team Autonomy**: Different teams can work on different services without conflicts
+- **Assignment Alignment**: Meets the core requirement of building a multi-component distributed system
+
+### 2. API Gateway Pattern
+**Decision**: Implemented a centralized API Gateway as the single entry point for all client requests.
+
+**Rationale**:
+- **Single Entry Point**: Clients interact with one URL instead of tracking multiple service endpoints
+- **Request Routing**: Intelligently routes requests to appropriate microservices
+- **Cross-Cutting Concerns**: Handles CORS, request logging, and monitoring in one place
+- **Service Abstraction**: Internal service structure can change without affecting clients
+- **Load Balancing**: Can distribute traffic across multiple service instances
+- **Simplified Client Code**: Frontend only needs to know one base URL
+
+### 3. Event-Driven Communication with RabbitMQ
+**Decision**: Used RabbitMQ message broker for asynchronous communication between services.
+
+**Rationale**:
+- **Loose Coupling**: Services don't need direct knowledge of each other
+- **Asynchronous Processing**: Services can process events at their own pace without blocking
+- **Reliability**: Messages are persisted and guaranteed delivery even if a service is temporarily down
+- **Scalability**: Multiple instances of a service can consume from the same queue
+- **Event Sourcing**: Complete audit trail of all order state changes
+- **Decoupled Workflow**: Order → Restaurant → Delivery flow happens through events
+
+**Event Flow**:
+```
+Order Service publishes → ORDER_CREATED → Restaurant Service consumes
+Order Service publishes → ORDER_CANCELLED → Restaurant Service consumes
+Restaurant Service publishes → ORDER_PREPARED → Delivery Service consumes
+```
+
+### 4. Hybrid Data Persistence Strategy
+**Decision**: Used different storage strategies for different services.
+
+**Rationale**:
+- **Order Service (In-Memory Map)**: 
+  - Fast read/write operations for order creation
+  - Acceptable for demo/prototype as order history is maintained in downstream services
+  - Would use database in production
+  
+- **Restaurant & Delivery Services (MongoDB)**:
+  - Need persistent storage for order tracking and history
+  - NoSQL flexibility for evolving schemas
+  - Document structure matches order/delivery data well
+  - Easy to query orders by status, restaurant, or delivery partner
+
+### 5. Synchronous HTTP for Client-Facing Operations
+**Decision**: Frontend communicates with API Gateway via REST/HTTP.
+
+**Rationale**:
+- **Standard Protocol**: HTTP/REST is universally supported
+- **Request-Response Model**: Fits well for user-initiated actions (place order, cancel order)
+- **Easy to Debug**: Tools like Postman, browser dev tools work out of the box
+- **Stateless**: Each request is independent, easy to load balance
+
+### 6. RBAC (Role-Based Access Control)
+**Decision**: Implemented middleware-based RBAC with three roles: customer, restaurant, delivery_partner.
+
+**Rationale**:
+- **Security**: Ensures users can only perform authorized actions
+- **Clear Permissions**: Each role has specific allowed operations
+- **Middleware Pattern**: Clean separation of authorization logic from business logic
+- **Extensible**: Easy to add new roles or permissions
+
+### 7. State Machine for Order Lifecycle
+**Decision**: Strict state transitions: PENDING → ACCEPTED → PREPARED → PICKED_UP → DELIVERED
+
+**Rationale**:
+- **Data Integrity**: Prevents invalid state transitions (e.g., can't deliver before pickup)
+- **Business Rules**: Encapsulates business logic (can only cancel PENDING orders)
+- **Predictability**: Clear understanding of order flow
+- **Audit Trail**: Easy to track where orders are in the process
+
+### 8. Docker Containerization
+**Decision**: Each service runs in its own Docker container with Docker Compose orchestration.
+
+**Rationale**:
+- **Consistency**: Same environment in development, testing, and production
+- **Isolation**: Services don't interfere with each other's dependencies
+- **Easy Deployment**: Single `docker-compose up` command to start everything
+- **Portability**: Runs on any system with Docker
+- **Resource Management**: Can set resource limits per service
+
+### 9. Health Checks and Monitoring
+**Decision**: Implemented health check endpoints and status monitoring for each service.
+
+**Rationale**:
+- **Observability**: Know if services are running and healthy
+- **Debugging**: Quickly identify which service is having issues
+- **Orchestration**: Docker/Kubernetes can auto-restart unhealthy services
+- **Load Balancing**: Remove unhealthy instances from rotation
+
+### 10. Frontend State Management with TanStack Query
+**Decision**: Used TanStack Query (React Query) for server state management instead of Redux/Context.
+
+**Rationale**:
+- **Caching**: Automatic caching of API responses
+- **Background Refetch**: Keeps data fresh without user intervention
+- **Loading States**: Built-in loading and error states
+- **Optimistic Updates**: Better UX with instant feedback
+- **Less Boilerplate**: Much simpler than Redux for API calls
+
+### 11. Configuration Management
+**Decision**: Centralized configuration files for users, restaurants, menu items, and delivery partners.
+
+**Rationale**:
+- **Single Source of Truth**: All services reference the same data
+- **Easy Testing**: Can quickly modify test data
+- **Prototype Speed**: Faster development without database setup
+- **Demo Ready**: Consistent data across all services
+
+### Trade-offs and Limitations
+
+**What We Sacrificed for Speed**:
+1. **No Authentication**: Would implement OAuth2/JWT in production
+2. **In-Memory Order Storage**: Would use database in production
+3. **No WebSockets**: Would implement for real-time updates in production
+4. **Static Data**: Would use databases for users, restaurants, menu items in production
+5. **Simplified Error Handling**: Would implement comprehensive error tracking in production
+6. **No Rate Limiting**: Would implement in production API Gateway
+7. **No Data Validation**: Would use comprehensive validation libraries (Joi, Zod) in production
