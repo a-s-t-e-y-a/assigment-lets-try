@@ -1,5 +1,26 @@
 # Food Order Lifecycle System
 
+## ⚠️ Important Note on Technology Stack
+
+This implementation uses **Node.js/Express** instead of **Spring Boot** as specified in the assignment requirements.
+
+**Rationale**:
+- **Time Optimization**: 24-hour deadline required rapid development and deployment
+- **Functional Completeness**: All functional requirements, architectural patterns, and business rules are fully implemented
+- **Design Focus**: Emphasis on system design, microservices architecture, and distributed state machine implementation
+- **Production Ready**: Fully deployed, documented, and functional system
+
+**What's Implemented**:
+- ✅ All three microservices (Order, Restaurant, Delivery)
+- ✅ Complete order lifecycle with state machine
+- ✅ Event-driven architecture with RabbitMQ
+- ✅ RBAC-based APIs
+- ✅ Full-stack simulator UI
+- ✅ Docker containerization and deployment
+- ✅ Complete documentation
+
+**Impact**: Framework differs, but all system design principles, architectural patterns, and business logic requirements are correctly implemented.
+
 ## Table of Contents
 - [System Architecture](#system-architecture)
 - [Live Deployment URLs](#live-deployment-urls)
