@@ -1,21 +1,22 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { deliveryApi } from '@/lib/api';
+import { DEFAULT_DRIVER } from '@/lib/constants';
 
-export function useDeliveries() {
+export function useDeliveries(driverId = DEFAULT_DRIVER) {
   return useQuery({
-    queryKey: ['deliveries'],
+    queryKey: ['deliveries', driverId],
     queryFn: async () => {
-      const response = await deliveryApi.getAll();
+      const response = await deliveryApi.getAll(driverId);
       return response.data;
     },
   });
 }
 
-export function useDelivery(id) {
+export function useDelivery(id, driverId = DEFAULT_DRIVER) {
   return useQuery({
-    queryKey: ['delivery', id],
+    queryKey: ['delivery', id, driverId],
     queryFn: async () => {
-      const response = await deliveryApi.getById(id);
+      const response = await deliveryApi.getById(driverId, id);
       return response.data;
     },
     enabled: !!id,

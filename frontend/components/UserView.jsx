@@ -19,7 +19,29 @@ export default function UserView() {
     if (savedSection) {
       setActiveSection(savedSection);
     }
+
+    const savedCart = localStorage.getItem('userCart');
+    if (savedCart) {
+      try {
+        setCart(JSON.parse(savedCart));
+      } catch (error) {
+        console.error('Error loading cart from localStorage:', error);
+      }
+    }
+
+    const savedAddress = localStorage.getItem('deliveryAddress');
+    if (savedAddress) {
+      setDeliveryAddress(savedAddress);
+    }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('userCart', JSON.stringify(cart));
+  }, [cart]);
+
+  useEffect(() => {
+    localStorage.setItem('deliveryAddress', deliveryAddress);
+  }, [deliveryAddress]);
 
   const handleSectionChange = (section) => {
     setActiveSection(section);
@@ -75,6 +97,7 @@ export default function UserView() {
     createOrder.mutate(orderData, {
       onSuccess: () => {
         setCart([]);
+        localStorage.removeItem('userCart');
         refetchOrders();
         handleSectionChange('orders');
       },

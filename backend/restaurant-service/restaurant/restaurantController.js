@@ -3,7 +3,8 @@ import { RestaurantService } from './restaurantService.js';
 export class RestaurantController {
   static async getAllOrders(req, res) {
     try {
-      const { status, restaurantId, sortBy, sortOrder, page = 1, limit = 10 } = req.query;
+      const { status, sortBy, sortOrder, page = 1, limit = 10 } = req.query;
+      const restaurantId = req.user.id;
       
       const filters = {
         status,
@@ -40,7 +41,15 @@ export class RestaurantController {
 
   static async getPendingOrders(req, res) {
     try {
-      const { restaurantId } = req.params;
+      const restaurantId = req.user.id;
+
+      if (req.params.restaurantId && req.params.restaurantId !== restaurantId) {
+        return res.status(403).json({
+          success: false,
+          error: 'You can only view orders for your restaurant'
+        });
+      }
+
       const orders = await RestaurantService.getPendingOrders(restaurantId);
 
       res.json({
@@ -61,12 +70,20 @@ export class RestaurantController {
   static async getOrderById(req, res) {
     try {
       const { orderId } = req.params;
+      const restaurantId = req.user.id;
       const order = await RestaurantService.getOrderById(orderId);
 
       if (!order) {
         return res.status(404).json({
           success: false,
           error: 'Order not found'
+        });
+      }
+
+      if (order.restaurantId !== restaurantId) {
+        return res.status(403).json({
+          success: false,
+          error: 'You can only view orders for your restaurant'
         });
       }
 
@@ -85,12 +102,30 @@ export class RestaurantController {
   static async acceptOrder(req, res) {
     try {
       const { orderId } = req.params;
-      const order = await RestaurantService.acceptOrder(orderId);
+      const restaurantId = req.user.id;
+
+      const order = await RestaurantService.getOrderById(orderId);
+      
+      if (!order) {
+        return res.status(404).json({
+          success: false,
+          error: 'Order not found'
+        });
+      }
+
+      if (order.restaurantId !== restaurantId) {
+        return res.status(403).json({
+          success: false,
+          error: 'You can only accept orders for your restaurant'
+        });
+      }
+
+      const updatedOrder = await RestaurantService.acceptOrder(orderId);
 
       res.json({
         success: true,
         message: 'Order accepted successfully',
-        data: order
+        data: updatedOrder
       });
     } catch (error) {
       const statusCode = error.message.includes('not found') ? 404 : 400;
@@ -104,12 +139,30 @@ export class RestaurantController {
   static async markOrderAsPrepared(req, res) {
     try {
       const { orderId } = req.params;
-      const order = await RestaurantService.markOrderAsPrepared(orderId);
+      const restaurantId = req.user.id;
+
+      const order = await RestaurantService.getOrderById(orderId);
+      
+      if (!order) {
+        return res.status(404).json({
+          success: false,
+          error: 'Order not found'
+        });
+      }
+
+      if (order.restaurantId !== restaurantId) {
+        return res.status(403).json({
+          success: false,
+          error: 'You can only prepare orders for your restaurant'
+        });
+      }
+
+      const updatedOrder = await RestaurantService.markOrderAsPrepared(orderId);
 
       res.json({
         success: true,
         message: 'Order marked as prepared successfully',
-        data: order
+        data: updatedOrder
       });
     } catch (error) {
       const statusCode = error.message.includes('not found') ? 404 : 400;

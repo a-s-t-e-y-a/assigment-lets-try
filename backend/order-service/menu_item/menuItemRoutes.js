@@ -6,17 +6,18 @@ import {
   getMenuItemByIdController,
   searchController
 } from './menuItemController.js';
+import { authenticateRole } from '../middleware/rbac.js';
 
 const router = express.Router();
 
-router.get('/restaurants', getAllRestaurantsController);
+router.get('/restaurants', authenticateRole(['customer']), getAllRestaurantsController);
 
-router.get('/restaurants/:id', getRestaurantByIdController);
+router.get('/restaurants/:id', authenticateRole(['customer']), getRestaurantByIdController);
 
-router.get('/restaurants/:id/menu', getMenuItemsByRestaurantController);
+router.get('/restaurants/:id/menu', authenticateRole(['customer']), getMenuItemsByRestaurantController);
 
-router.get('/restaurants/:id/menu/:itemId', getMenuItemByIdController);
+router.get('/restaurants/:id/menu/:itemId', authenticateRole(['customer']), getMenuItemByIdController);
 
-router.get('/search', searchController);
+router.get('/search', authenticateRole(['customer']), searchController);
 
 export default router;

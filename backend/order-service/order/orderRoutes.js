@@ -14,17 +14,18 @@ import {
   cancelOrderSchema,
   getUserOrdersSchema
 } from './orderValidation.js';
+import { authenticateRole } from '../middleware/rbac.js';
 
 const router = express.Router();
 
-router.post('/orders', validate(placeOrderSchema), placeOrderController);
+router.post('/orders', authenticateRole(['customer']), validate(placeOrderSchema), placeOrderController);
 
-router.get('/orders', validate(getAllOrdersSchema), getAllOrdersController);
+router.get('/orders', authenticateRole(['customer', 'restaurant', 'delivery_partner']), validate(getAllOrdersSchema), getAllOrdersController);
 
-router.get('/orders/:id', validate(getOrderByIdSchema), getOrderByIdController);
+router.get('/orders/:id', authenticateRole(['customer', 'restaurant', 'delivery_partner']), validate(getOrderByIdSchema), getOrderByIdController);
 
-router.put('/orders/:id/cancel', validate(cancelOrderSchema), cancelOrderController);
+router.put('/orders/:id/cancel', authenticateRole(['customer']), validate(cancelOrderSchema), cancelOrderController);
 
-router.get('/users/:userId/orders', validate(getUserOrdersSchema), getUserOrdersController);
+router.get('/users/:userId/orders', authenticateRole(['customer']), validate(getUserOrdersSchema), getUserOrdersController);
 
 export default router;

@@ -47,12 +47,17 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/orders/menu-item/restaurants?page=1&limit=10",
+              "raw": "http://localhost:4000/api/orders/menu-item/restaurants?userId=user_001&page=1&limit=10",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
               "path": ["api", "orders", "menu-item", "restaurants"],
               "query": [
+                {
+                  "key": "userId",
+                  "value": "user_001",
+                  "description": "Customer ID for RBAC authentication"
+                },
                 {
                   "key": "page",
                   "value": "1"
@@ -71,11 +76,18 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/orders/menu-item/restaurants/rest_001",
+              "raw": "http://localhost:4000/api/orders/menu-item/restaurants/rest_001?userId=user_001",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "orders", "menu-item", "restaurants", "rest_001"]
+              "path": ["api", "orders", "menu-item", "restaurants", "rest_001"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "user_001",
+                  "description": "Customer ID for RBAC authentication"
+                }
+              ]
             }
           }
         },
@@ -85,12 +97,17 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/orders/menu-item/restaurants/rest_001/menu?page=1&limit=10",
+              "raw": "http://localhost:4000/api/orders/menu-item/restaurants/rest_001/menu?userId=user_001&page=1&limit=10",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
               "path": ["api", "orders", "menu-item", "restaurants", "rest_001", "menu"],
               "query": [
+                {
+                  "key": "userId",
+                  "value": "user_001",
+                  "description": "Customer ID for RBAC authentication"
+                },
                 {
                   "key": "page",
                   "value": "1"
@@ -109,11 +126,18 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/orders/menu-item/restaurants/rest_001/menu/item_001_001",
+              "raw": "http://localhost:4000/api/orders/menu-item/restaurants/rest_001/menu/item_001_001?userId=user_001",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "orders", "menu-item", "restaurants", "rest_001", "menu", "item_001_001"]
+              "path": ["api", "orders", "menu-item", "restaurants", "rest_001", "menu", "item_001_001"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "user_001",
+                  "description": "Customer ID for RBAC authentication"
+                }
+              ]
             }
           }
         },
@@ -123,12 +147,17 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/orders/menu-item/search?q=pizza&page=1&limit=10",
+              "raw": "http://localhost:4000/api/orders/menu-item/search?userId=user_001&q=pizza&page=1&limit=10",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
               "path": ["api", "orders", "menu-item", "search"],
               "query": [
+                {
+                  "key": "userId",
+                  "value": "user_001",
+                  "description": "Customer ID for RBAC authentication"
+                },
                 {
                   "key": "q",
                   "value": "pizza"
@@ -179,12 +208,17 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/orders/orders?page=1&limit=10",
+              "raw": "http://localhost:4000/api/orders/orders?userId=user_001&page=1&limit=10",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
               "path": ["api", "orders", "orders"],
               "query": [
+                {
+                  "key": "userId",
+                  "value": "user_001",
+                  "description": "Customer ID for RBAC authentication"
+                },
                 {
                   "key": "page",
                   "value": "1"
@@ -203,12 +237,17 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/orders/orders?status=PENDING&page=1&limit=10",
+              "raw": "http://localhost:4000/api/orders/orders?userId=user_001&status=PENDING&page=1&limit=10",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
               "path": ["api", "orders", "orders"],
               "query": [
+                {
+                  "key": "userId",
+                  "value": "user_001",
+                  "description": "Customer ID for RBAC authentication"
+                },
                 {
                   "key": "status",
                   "value": "PENDING",
@@ -232,12 +271,17 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/orders/orders?sortBy=status&sortOrder=asc&page=1&limit=10",
+              "raw": "http://localhost:4000/api/orders/orders?userId=user_001&sortBy=status&sortOrder=asc&page=1&limit=10",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
               "path": ["api", "orders", "orders"],
               "query": [
+                {
+                  "key": "userId",
+                  "value": "user_001",
+                  "description": "Customer ID for RBAC authentication"
+                },
                 {
                   "key": "sortBy",
                   "value": "status",
@@ -266,12 +310,17 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/orders/orders?status=PENDING&sortBy=totalAmount&sortOrder=desc&page=1&limit=10",
+              "raw": "http://localhost:4000/api/orders/orders?userId=user_001&status=PENDING&sortBy=totalAmount&sortOrder=desc&page=1&limit=10",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
               "path": ["api", "orders", "orders"],
               "query": [
+                {
+                  "key": "userId",
+                  "value": "user_001",
+                  "description": "Customer ID for RBAC authentication"
+                },
                 {
                   "key": "status",
                   "value": "PENDING"
@@ -302,11 +351,18 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/orders/orders/{{orderId}}",
+              "raw": "http://localhost:4000/api/orders/orders/{{orderId}}?userId=user_001",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "orders", "orders", "{{orderId}}"]
+              "path": ["api", "orders", "orders", "{{orderId}}"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "user_001",
+                  "description": "Customer ID for RBAC authentication"
+                }
+              ]
             }
           }
         },
@@ -316,12 +372,17 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/orders/users/user_001/orders?page=1&limit=10",
+              "raw": "http://localhost:4000/api/orders/users/user_001/orders?userId=user_001&page=1&limit=10",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
               "path": ["api", "orders", "users", "user_001", "orders"],
               "query": [
+                {
+                  "key": "userId",
+                  "value": "user_001",
+                  "description": "Customer ID for RBAC authentication"
+                },
                 {
                   "key": "page",
                   "value": "1"
@@ -340,12 +401,17 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/orders/users/user_001/orders?status=PENDING&sortBy=createdAt&sortOrder=desc&page=1&limit=10",
+              "raw": "http://localhost:4000/api/orders/users/user_001/orders?userId=user_001&status=PENDING&sortBy=createdAt&sortOrder=desc&page=1&limit=10",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
               "path": ["api", "orders", "users", "user_001", "orders"],
               "query": [
+                {
+                  "key": "userId",
+                  "value": "user_001",
+                  "description": "Customer ID for RBAC authentication"
+                },
                 {
                   "key": "status",
                   "value": "PENDING"
@@ -380,6 +446,10 @@
                 "value": "application/json"
               }
             ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"user_001\"\n}"
+            },
             "url": {
               "raw": "http://localhost:4000/api/orders/orders/{{orderId}}/cancel",
               "protocol": "http",
@@ -400,12 +470,17 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/restaurant/orders?page=1&limit=10",
+              "raw": "http://localhost:4000/api/restaurant/orders?restaurantId=rest_001&page=1&limit=10",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
               "path": ["api", "restaurant", "orders"],
               "query": [
+                {
+                  "key": "restaurantId",
+                  "value": "rest_001",
+                  "description": "Restaurant ID for RBAC authentication"
+                },
                 {
                   "key": "page",
                   "value": "1"
@@ -424,11 +499,18 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/restaurant/restaurants/rest_001/orders/pending",
+              "raw": "http://localhost:4000/api/restaurant/restaurants/rest_001/orders/pending?restaurantId=rest_001",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "restaurant", "restaurants", "rest_001", "orders", "pending"]
+              "path": ["api", "restaurant", "restaurants", "rest_001", "orders", "pending"],
+              "query": [
+                {
+                  "key": "restaurantId",
+                  "value": "rest_001",
+                  "description": "Restaurant ID for RBAC authentication"
+                }
+              ]
             }
           }
         },
@@ -438,11 +520,18 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/restaurant/orders/{{orderId}}",
+              "raw": "http://localhost:4000/api/restaurant/orders/{{orderId}}?restaurantId=rest_001",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "restaurant", "orders", "{{orderId}}"]
+              "path": ["api", "restaurant", "orders", "{{orderId}}"],
+              "query": [
+                {
+                  "key": "restaurantId",
+                  "value": "rest_001",
+                  "description": "Restaurant ID for RBAC authentication"
+                }
+              ]
             }
           }
         },
@@ -450,7 +539,16 @@
           "name": "Accept Order",
           "request": {
             "method": "PUT",
-            "header": [],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": \"rest_001\"\n}"
+            },
             "url": {
               "raw": "http://localhost:4000/api/restaurant/orders/{{orderId}}/accept",
               "protocol": "http",
@@ -464,7 +562,16 @@
           "name": "Mark Order as Prepared",
           "request": {
             "method": "PUT",
-            "header": [],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": \"rest_001\"\n}"
+            },
             "url": {
               "raw": "http://localhost:4000/api/restaurant/orders/{{orderId}}/prepare",
               "protocol": "http",
@@ -485,12 +592,17 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/delivery/orders?page=1&limit=10",
+              "raw": "http://localhost:4000/api/delivery/orders?driverId=driver_001&page=1&limit=10",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
               "path": ["api", "delivery", "orders"],
               "query": [
+                {
+                  "key": "driverId",
+                  "value": "driver_001",
+                  "description": "Driver ID for RBAC authentication"
+                },
                 {
                   "key": "page",
                   "value": "1"
@@ -509,11 +621,18 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/delivery/orders/prepared",
+              "raw": "http://localhost:4000/api/delivery/orders/prepared?driverId=driver_001",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "delivery", "orders", "prepared"]
+              "path": ["api", "delivery", "orders", "prepared"],
+              "query": [
+                {
+                  "key": "driverId",
+                  "value": "driver_001",
+                  "description": "Driver ID for RBAC authentication"
+                }
+              ]
             }
           }
         },
@@ -523,11 +642,18 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/delivery/orders/{{orderId}}",
+              "raw": "http://localhost:4000/api/delivery/orders/{{orderId}}?driverId=driver_001",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "delivery", "orders", "{{orderId}}"]
+              "path": ["api", "delivery", "orders", "{{orderId}}"],
+              "query": [
+                {
+                  "key": "driverId",
+                  "value": "driver_001",
+                  "description": "Driver ID for RBAC authentication"
+                }
+              ]
             }
           }
         },
@@ -558,7 +684,16 @@
           "name": "Deliver Order",
           "request": {
             "method": "PUT",
-            "header": [],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"driverId\": \"driver_001\"\n}"
+            },
             "url": {
               "raw": "http://localhost:4000/api/delivery/orders/{{orderId}}/deliver",
               "protocol": "http",

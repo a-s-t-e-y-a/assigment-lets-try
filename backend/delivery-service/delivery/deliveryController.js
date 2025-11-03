@@ -83,14 +83,7 @@ export class DeliveryController {
   static async pickupOrder(req, res) {
     try {
       const { orderId } = req.params;
-      const { driverId } = req.body;
-
-      if (!driverId) {
-        return res.status(400).json({
-          success: false,
-          error: 'Driver ID is required'
-        });
-      }
+      const driverId = req.user.id;
 
       const order = await DeliveryService.pickupOrder(orderId, driverId);
 
@@ -111,12 +104,30 @@ export class DeliveryController {
   static async deliverOrder(req, res) {
     try {
       const { orderId } = req.params;
-      const order = await DeliveryService.deliverOrder(orderId);
+      const driverId = req.user.id;
+
+      const order = await DeliveryService.getOrderById(orderId);
+      
+      if (!order) {
+        return res.status(404).json({
+          success: false,
+          error: 'Order not found'
+        });
+      }
+
+      if (order.deliveryPartnerId && order.deliveryPartnerId !== driverId) {
+        return res.status(403).json({
+          success: false,
+          error: 'You can only deliver orders assigned to you'
+        });
+      }
+
+      const updatedOrder = await DeliveryService.deliverOrder(orderId);
 
       res.json({
         success: true,
         message: 'Order delivered successfully',
-        data: order
+        data: updatedOrder
       });
     } catch (error) {
       const statusCode = error.message.includes('not found') ? 404 : 400;

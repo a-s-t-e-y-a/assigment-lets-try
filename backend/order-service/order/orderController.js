@@ -9,6 +9,13 @@ export const placeOrderController = async (req, res) => {
   try {
     const { userId, restaurantId, items, deliveryAddress } = req.body;
 
+    if (req.user.id !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: 'You can only place orders for yourself'
+      });
+    }
+
     const user = getUserById(userId);
     if (!user) {
       return res.status(404).json({
@@ -185,6 +192,13 @@ export const cancelOrderController = async (req, res) => {
       });
     }
 
+    if (order.userId !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        message: 'You can only cancel your own orders'
+      });
+    }
+
     const cancelledOrder = OrderService.cancelOrder(id);
 
     await OrderService.publishOrderCancelled(cancelledOrder);
@@ -205,6 +219,14 @@ export const cancelOrderController = async (req, res) => {
 export const getUserOrdersController = (req, res) => {
   try {
     const { userId } = req.params;
+
+    if (req.user.id !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: 'You can only view your own orders'
+      });
+    }
+
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const status = req.query.status;

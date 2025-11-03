@@ -1,32 +1,33 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { restaurantApi } from '@/lib/api';
+import { DEFAULT_USER } from '@/lib/constants';
 
-export function useRestaurants() {
+export function useRestaurants(userId = DEFAULT_USER) {
   return useQuery({
-    queryKey: ['restaurants'],
+    queryKey: ['restaurants', userId],
     queryFn: async () => {
-      const response = await restaurantApi.getAll();
+      const response = await restaurantApi.getAll(userId);
       return response.data;
     },
   });
 }
 
-export function useRestaurant(id) {
+export function useRestaurant(id, userId = DEFAULT_USER) {
   return useQuery({
-    queryKey: ['restaurant', id],
+    queryKey: ['restaurant', id, userId],
     queryFn: async () => {
-      const response = await restaurantApi.getById(id);
+      const response = await restaurantApi.getById(userId, id);
       return response.data;
     },
     enabled: !!id,
   });
 }
 
-export function useRestaurantMenu(id) {
+export function useRestaurantMenu(id, userId = DEFAULT_USER) {
   return useQuery({
-    queryKey: ['restaurant', id, 'menu'],
+    queryKey: ['restaurant', id, 'menu', userId],
     queryFn: async () => {
-      const response = await restaurantApi.getMenu(id);
+      const response = await restaurantApi.getMenu(userId, id);
       return response.data;
     },
     enabled: !!id,

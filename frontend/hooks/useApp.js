@@ -1,11 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { restaurantApi, orderApi, deliveryApi } from '@/lib/api';
+import { DEFAULT_USER, DEFAULT_RESTAURANT, DEFAULT_DRIVER } from '@/lib/constants';
 
 export function useRestaurants(params) {
   return useQuery({
     queryKey: ['restaurants', params],
     queryFn: async () => {
-      const response = await restaurantApi.getAll(params);
+      const response = await restaurantApi.getAll(DEFAULT_USER, params);
       return response.data;
     },
   });
@@ -15,7 +16,7 @@ export function useRestaurant(id) {
   return useQuery({
     queryKey: ['restaurant', id],
     queryFn: async () => {
-      const response = await restaurantApi.getById(id);
+      const response = await restaurantApi.getById(DEFAULT_USER, id);
       return response.data;
     },
     enabled: !!id,
@@ -26,7 +27,7 @@ export function useRestaurantMenu(id, params) {
   return useQuery({
     queryKey: ['restaurant', id, 'menu', params],
     queryFn: async () => {
-      const response = await restaurantApi.getMenu(id, params);
+      const response = await restaurantApi.getMenu(DEFAULT_USER, id, params);
       return response.data;
     },
     enabled: !!id,
@@ -58,7 +59,7 @@ export function useCreateOrder() {
 export function useCancelOrder() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (orderId) => orderApi.cancel(orderId),
+    mutationFn: (orderId) => orderApi.cancel(DEFAULT_USER, orderId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
       queryClient.invalidateQueries({ queryKey: ['orders'] });
@@ -84,7 +85,7 @@ export function useRestaurantOrders(params) {
   return useQuery({
     queryKey: ['restaurant', 'orders', params],
     queryFn: async () => {
-      const response = await restaurantApi.getOrders(params);
+      const response = await restaurantApi.getOrders(DEFAULT_RESTAURANT, params);
       return response.data;
     },
   });
@@ -93,7 +94,7 @@ export function useRestaurantOrders(params) {
 export function useAcceptOrder() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (orderId) => restaurantApi.acceptOrder(orderId),
+    mutationFn: (orderId) => restaurantApi.acceptOrder(DEFAULT_RESTAURANT, orderId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['restaurant'] });
       queryClient.invalidateQueries({ queryKey: ['orders'] });
@@ -104,7 +105,7 @@ export function useAcceptOrder() {
 export function usePrepareOrder() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (orderId) => restaurantApi.prepareOrder(orderId),
+    mutationFn: (orderId) => restaurantApi.prepareOrder(DEFAULT_RESTAURANT, orderId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['restaurant'] });
       queryClient.invalidateQueries({ queryKey: ['orders'] });
@@ -117,7 +118,7 @@ export function useDeliveryOrders(params) {
   return useQuery({
     queryKey: ['delivery', 'orders', params],
     queryFn: async () => {
-      const response = await deliveryApi.getAll(params);
+      const response = await deliveryApi.getAll(DEFAULT_DRIVER, params);
       return response.data;
     },
   });
@@ -127,7 +128,7 @@ export function usePreparedOrders() {
   return useQuery({
     queryKey: ['delivery', 'prepared'],
     queryFn: async () => {
-      const response = await deliveryApi.getPreparedOrders();
+      const response = await deliveryApi.getPreparedOrders(DEFAULT_DRIVER);
       return response.data;
     },
   });
@@ -147,7 +148,7 @@ export function usePickupOrder() {
 export function useDeliverOrder() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (orderId) => deliveryApi.deliver(orderId),
+    mutationFn: (orderId) => deliveryApi.deliver(orderId, DEFAULT_DRIVER),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['delivery'] });
       queryClient.invalidateQueries({ queryKey: ['orders'] });
