@@ -50,12 +50,12 @@ The system follows a microservices architecture with:
 
 ## Live Deployment URLs
 
-- **Frontend Application**: http://210.79.129.22:7000/
-- **Backend API Gateway**: http://210.79.129.22:4000/api
-- **API Gateway Status Monitor**: http://210.79.129.22:4000/status
-- **Order Service Health**: http://210.79.129.22:4000/api/orders/health
-- **Restaurant Service Health**: http://210.79.129.22:4000/api/restaurant/health
-- **Delivery Service Health**: http://210.79.129.22:4000/api/delivery/health
+- **Frontend Application**: http://210.79.128.220:7000/
+- **Backend API Gateway**: http://210.79.128.220:4000/api
+- **API Gateway Status Monitor**: http://210.79.128.220:4000/status
+- **Order Service Health**: http://210.79.128.220:4000/api/orders/health
+- **Restaurant Service Health**: http://210.79.128.220:4000/api/restaurant/health
+- **Delivery Service Health**: http://210.79.128.220:4000/api/delivery/health
 
 ## API Testing
 
